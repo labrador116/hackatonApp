@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
+    style="@style/Base.Theme.AppCompat">
+
+    <Button
+        android:id="@+id/create_problem_button"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/oval_button_red"
+        android:gravity="center"
+        android:text="@string/create_new_problem_button_text"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_problem_button"
+        >
+
+    <Button
+        android:id="@+id/show_problem_buttpn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/oval_button_green"
+        android:gravity="center"
+        android:text="@string/show_problem_button_text"
+        android:textSize="12sp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

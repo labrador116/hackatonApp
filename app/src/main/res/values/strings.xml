@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ProblemResolverApp</string>
+    <string name="create_new_problem_button_text">Problem!</string>
+    <string name="show_problem_button_text">Show all my problems</string>
+</resources>
