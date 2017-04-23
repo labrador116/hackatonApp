@@ -4,8 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import dev.hackaton.problemresolverapp.R;
-import dev.hackaton.problemresolverapp.views.CreateNewProblemActivity;
-import dev.hackaton.problemresolverapp.views.CreateNewProblemFragment;
+import dev.hackaton.problemresolverapp.views.fragments.CreateNewProblemFragment;
 
 /**
  * Created by sbt-markin-aa on 22.04.17.

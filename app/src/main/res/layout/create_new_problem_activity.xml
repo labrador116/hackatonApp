@@ -5,5 +5,5 @@
     android:id="@+id/new_problem_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dev.hackaton.problemresolverapp.views.CreateNewProblemActivity">
+    tools:context="dev.hackaton.problemresolverapp.views.activities.CreateNewProblemActivity">
 </FrameLayout>

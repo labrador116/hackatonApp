@@ -6,10 +6,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
+
+import com.google.zxing.Result;
 
 import java.io.File;
 
+import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
 import dev.hackaton.problemresolverapp.models.instances.ProblemPhoto;
+import dev.hackaton.problemresolverapp.views.activities.WebViewActivity;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
  * Created by sbt-markin-aa on 22.04.17.
@@ -39,5 +45,7 @@ public class CreateNewProblemFragmentPresenter{
         return captureImage;
     }
 
-
+    public void sendProblem(Context context, int problemId, int zoneId, String description){
+        ProblemsDataBinding.sendProblem(context,problemId,zoneId,description);
+    }
 }

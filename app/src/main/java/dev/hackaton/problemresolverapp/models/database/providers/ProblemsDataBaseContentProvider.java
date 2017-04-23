@@ -39,7 +39,7 @@ public class ProblemsDataBaseContentProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor cursor = mDatabase.query(MyProblemsTable.NAME,
                 projection,
-                selection+ " =?",
+                selection,
                 selectionArgs,
                 null,
                 null,
