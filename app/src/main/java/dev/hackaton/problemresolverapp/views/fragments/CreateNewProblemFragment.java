@@ -135,6 +135,9 @@ public class CreateNewProblemFragment extends Fragment {
 
                 GetData getData = new GetData();
                 getData.execute("http://62.109.16.244:8080/api/problem/?id="+problemId);
+                Intent intent = getActivity().getIntent();
+                getActivity().finish();
+                startActivity(intent);
             }
         }
     }
