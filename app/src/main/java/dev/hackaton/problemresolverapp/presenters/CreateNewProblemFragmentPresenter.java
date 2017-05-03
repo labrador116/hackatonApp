@@ -1,12 +1,13 @@
 package dev.hackaton.problemresolverapp.presenters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
 
 import com.google.zxing.Result;
 
@@ -14,7 +15,6 @@ import java.io.File;
 
 import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
 import dev.hackaton.problemresolverapp.models.instances.ProblemPhoto;
-import dev.hackaton.problemresolverapp.views.activities.WebViewActivity;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
@@ -47,5 +47,20 @@ public class CreateNewProblemFragmentPresenter{
 
     public void sendProblem(Context context, int problemId, int zoneId, String description){
         ProblemsDataBinding.sendProblem(context,problemId,zoneId,description);
+    }
+
+    public void scanCode(ZXingScannerView scanner, Context context, Activity activity){
+        scanner = new ZXingScannerView(context);
+        scanner.setResultHandler(new ZXingScannerView.ResultHandler() {
+            @Override
+            public void handleResult(Result result) {
+                String res = result.getText();
+                scanner.stopCamera();
+                //ToDo getRequest
+            }
+        });
+
+        activity.setContentView(scanner);
+        scanner.startCamera();
     }
 }

@@ -1,8 +1,6 @@
 package dev.hackaton.problemresolverapp.views.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -30,10 +28,7 @@ import java.net.URL;
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.presenters.CreateNewProblemFragmentPresenter;
 import dev.hackaton.problemresolverapp.views.activities.ShowMyProblemsActivity;
-import dev.hackaton.problemresolverapp.views.activities.WebViewActivity;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
-import static android.R.attr.description;
 
 /**
  * Created by sbt-markin-aa on 22.04.17.
@@ -129,32 +124,13 @@ public class CreateNewProblemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==CreateNewProblemFragment.REQUEST_START_ACTIVITY_WEB_VIEW){
             if(data!=null) {
-                String answerUrl = data.getStringExtra(WebViewActivity.ANSWER_URL);
-
-                String problemId =Uri.parse(answerUrl).getLastPathSegment();
-
-                GetData getData = new GetData();
-                getData.execute("http://62.109.16.244:8080/api/problem/?id="+problemId);
-                Intent intent = getActivity().getIntent();
-                getActivity().finish();
-                startActivity(intent);
+                //ToDo
             }
         }
     }
 
     private void scanCode(){
-        mScannerView = new ZXingScannerView(getContext());
-        mScannerView.setResultHandler(new ZXingScannerView.ResultHandler() {
-            @Override
-            public void handleResult(Result result) {
-                String res = result.getText();
-                mScannerView.stopCamera();
-                startWebView(res);
-            }
-        });
 
-        getActivity().setContentView(mScannerView);
-        mScannerView.startCamera();
     }
 
     private void startWebView(String link)  {

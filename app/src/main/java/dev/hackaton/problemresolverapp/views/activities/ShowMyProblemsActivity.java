@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import dev.hackaton.problemresolverapp.R;
+import dev.hackaton.problemresolverapp.presenters.ShowMyProblemActivityPresenter;
 import dev.hackaton.problemresolverapp.views.fragments.ShowMyProblemFragment;
 
 /**
@@ -13,15 +14,16 @@ import dev.hackaton.problemresolverapp.views.fragments.ShowMyProblemFragment;
 
 public class ShowMyProblemsActivity extends AppCompatActivity {
     private ShowMyProblemFragment mFragment;
+    private ShowMyProblemActivityPresenter mPresenter;
+
+    public ShowMyProblemsActivity(){
+        mPresenter = new ShowMyProblemActivityPresenter();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_my_problem_activity);
-
-        if(mFragment==null){
-            mFragment=new ShowMyProblemFragment();
-        }
-        getSupportFragmentManager().beginTransaction().add(R.id.show_my_problem_fragment_container,mFragment).commit();
+        mPresenter.createFragment(mFragment, this);
     }
 }
