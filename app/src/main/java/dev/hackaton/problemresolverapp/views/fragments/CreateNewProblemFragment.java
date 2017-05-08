@@ -1,6 +1,7 @@
 package dev.hackaton.problemresolverapp.views.fragments;
 
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import dev.hackaton.problemresolverapp.R;
+import dev.hackaton.problemresolverapp.models.loaders.GetRequestLoader;
+import dev.hackaton.problemresolverapp.models.loaders.PostRequestLoader;
 import dev.hackaton.problemresolverapp.presenters.CreateNewProblemFragmentPresenter;
 import dev.hackaton.problemresolverapp.views.activities.ShowMyProblemsActivity;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -34,7 +39,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * Created by sbt-markin-aa on 22.04.17.
  */
 
-public class CreateNewProblemFragment extends Fragment {
+public class CreateNewProblemFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>, CreateNewProblemFragmentPresenter.ScanCallback {
     public static final int REQUEST_PHOTO = 1;
     public static final int REQUEST_BROWSER= 11;
     public static final int REQUEST_START_ACTIVITY_WEB_VIEW=5;
@@ -46,9 +51,11 @@ public class CreateNewProblemFragment extends Fragment {
     private CreateNewProblemFragmentPresenter mPresenter;
     private Uri mUri;
     private ZXingScannerView mScannerView;
+    private android.support.v4.content.Loader<String> mLoader;
+    private String mUrlForGetRequestFromScanner;
 
     public CreateNewProblemFragment(){
-        mPresenter = new CreateNewProblemFragmentPresenter();
+        mPresenter = new CreateNewProblemFragmentPresenter(this);
     }
 
     public static CreateNewProblemFragment newInstance(){
@@ -98,9 +105,8 @@ public class CreateNewProblemFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if(mUri!=null){
-            mPresenter.saveOnGalerySendBroadcast(getContext(),mUri);
-            scanCode();
+        if(mScannerView!=null){
+            mScannerView.stopCamera();
         }
     }
 
@@ -122,66 +128,102 @@ public class CreateNewProblemFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==CreateNewProblemFragment.REQUEST_START_ACTIVITY_WEB_VIEW){
-            if(data!=null) {
-                //ToDo
-            }
+        if(mUri!=null) {
+            mPresenter.scanCode(mScannerView,getContext(), (AppCompatActivity) getActivity());
+            mPresenter.saveOnGalerySendBroadcast(getContext(),mUri);
         }
+    }
+
+    @Override
+    public void scanCallbackValue(String url) {
+        mUrlForGetRequestFromScanner=url;
+        mPresenter.createLoaderForGetRequest(mLoader, (AppCompatActivity) getActivity(), mUrlForGetRequestFromScanner, this);
+    }
+
+    @Override
+    public android.support.v4.content.Loader<String> onCreateLoader(int id, Bundle args) {
+        switch (id){
+            case 1:
+                String urlGet =args.getString(GetRequestLoader.URL_FOR_GET_REQUEST);
+                mLoader = new GetRequestLoader(getContext(), urlGet);
+                break;
+            case 2:
+                String urlPost = args.getString(PostRequestLoader.URL_FOR_POST_REQUEST);
+                mLoader = new PostRequestLoader(getContext(),urlPost);
+                break;
+        }
+        return mLoader;
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<String> loader, String data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<String> loader) {
+
     }
 
     private void scanCode(){
+        mScannerView = new ZXingScannerView(getContext());
+        mScannerView.setResultHandler(new ZXingScannerView.ResultHandler() {
+            @Override
+            public void handleResult(Result result) {
+                String res = result.getText();
+                mScannerView.stopCamera();
 
+            }
+        });
+
+        getActivity().setContentView(mScannerView);
+        mScannerView.startCamera();
     }
 
-    private void startWebView(String link)  {
-        Intent intent = new Intent(getActivity(), WebViewActivity.class);
-        intent.putExtra(URI_LINK,link);
-        startActivityForResult(intent,REQUEST_START_ACTIVITY_WEB_VIEW);
-    }
 
-    private class GetData extends AsyncTask<String, String, String> {
-
-        HttpURLConnection urlConnection;
-
-        @Override
-        protected String doInBackground(String... args) {
-
-            StringBuilder result = new StringBuilder();
-
-            try {
-                URL url = new URL(args[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
-                }
-
-            }catch( Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                urlConnection.disconnect();
-            }
-
-
-            return result.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                int requestId = jsonObject.getInt("requestId");
-                int areaId = jsonObject.getInt("areaId");
-                String description = jsonObject.getString("description");
-                mPresenter.sendProblem(getContext(), requestId, areaId, description);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private class GetData extends AsyncTask<String, String, String> {
+//
+//        HttpURLConnection urlConnection;
+//
+//        @Override
+//        protected String doInBackground(String... args) {
+//
+//            StringBuilder result = new StringBuilder();
+//
+//            try {
+//                URL url = new URL(args[0]);
+//                urlConnection = (HttpURLConnection) url.openConnection();
+//                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+//
+//                String line;
+//                while ((line = reader.readLine()) != null) {
+//                    result.append(line);
+//                }
+//
+//            }catch( Exception e) {
+//                e.printStackTrace();
+//            }
+//            finally {
+//                urlConnection.disconnect();
+//            }
+//
+//
+//            return result.toString();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                int requestId = jsonObject.getInt("requestId");
+//                int areaId = jsonObject.getInt("areaId");
+//                String description = jsonObject.getString("description");
+//                mPresenter.sendProblem(getContext(), requestId, areaId, description);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

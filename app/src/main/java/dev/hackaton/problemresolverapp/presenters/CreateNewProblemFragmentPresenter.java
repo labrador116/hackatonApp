@@ -1,20 +1,26 @@
 package dev.hackaton.problemresolverapp.presenters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 
 import java.io.File;
 
+import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
 import dev.hackaton.problemresolverapp.models.instances.ProblemPhoto;
+import dev.hackaton.problemresolverapp.models.loaders.GetRequestLoader;
+import dev.hackaton.problemresolverapp.views.fragments.CreateNewProblemFragment;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
@@ -22,6 +28,11 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  */
 
 public class CreateNewProblemFragmentPresenter{
+    private ScanCallback mCallback;
+
+    public CreateNewProblemFragmentPresenter(Fragment fragment){
+        mCallback = (ScanCallback) fragment;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public File getPhotoFile (Context context){
@@ -49,18 +60,25 @@ public class CreateNewProblemFragmentPresenter{
         ProblemsDataBinding.sendProblem(context,problemId,zoneId,description);
     }
 
-    public void scanCode(ZXingScannerView scanner, Context context, Activity activity){
+    public void scanCode(ZXingScannerView scanner, Context context, AppCompatActivity activity){
         scanner = new ZXingScannerView(context);
         scanner.setResultHandler(new ZXingScannerView.ResultHandler() {
             @Override
             public void handleResult(Result result) {
-                String res = result.getText();
-                scanner.stopCamera();
-                //ToDo getRequest
+                mCallback.scanCallbackValue(result.getText());
             }
         });
-
         activity.setContentView(scanner);
         scanner.startCamera();
+    }
+
+    public void createLoaderForGetRequest(Loader<String> loader, AppCompatActivity activity, String urlForGet, CreateNewProblemFragment fragment){
+        Bundle bundle = new Bundle();
+        bundle.putString(GetRequestLoader.URL_FOR_GET_REQUEST, urlForGet);
+        activity.getSupportLoaderManager().initLoader(1,bundle, fragment);
+    }
+
+    public interface ScanCallback {
+        void scanCallbackValue(String url);
     }
 }
