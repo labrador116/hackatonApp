@@ -1,12 +1,13 @@
 package dev.hackaton.problemresolverapp.models.instances;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by sbt-markin-aa on 08.05.17.
  */
 
-public class InputProblem {
+public class GetAnswerAboutProblemArea implements Serializable{
     private int mZoneId;
     private List<String> mListOfProblems;
 

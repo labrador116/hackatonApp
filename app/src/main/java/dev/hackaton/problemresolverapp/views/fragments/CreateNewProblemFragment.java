@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import dev.hackaton.problemresolverapp.R;
+import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
 import dev.hackaton.problemresolverapp.models.loaders.GetRequestLoader;
 import dev.hackaton.problemresolverapp.models.loaders.PostRequestLoader;
 import dev.hackaton.problemresolverapp.presenters.CreateNewProblemFragmentPresenter;
@@ -41,8 +42,6 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class CreateNewProblemFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>, CreateNewProblemFragmentPresenter.ScanCallback {
     public static final int REQUEST_PHOTO = 1;
-    public static final int REQUEST_BROWSER= 11;
-    public static final int REQUEST_START_ACTIVITY_WEB_VIEW=5;
     public static final String URI_STATE="uri_state";
     public static final String URI_LINK = "link";
 
@@ -53,6 +52,7 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     private ZXingScannerView mScannerView;
     private android.support.v4.content.Loader<String> mLoader;
     private String mUrlForGetRequestFromScanner;
+    GetAnswerAboutProblemArea mGetAnswer;
 
     public CreateNewProblemFragment(){
         mPresenter = new CreateNewProblemFragmentPresenter(this);
@@ -157,6 +157,10 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<String> loader, String data) {
+        if (loader instanceof GetRequestLoader){
+            mGetAnswer = mPresenter.GetRequestJsoneParse(data);
+            mPresenter.createDetailActivity(getContext(), mGetAnswer);
+        }
 
     }
 

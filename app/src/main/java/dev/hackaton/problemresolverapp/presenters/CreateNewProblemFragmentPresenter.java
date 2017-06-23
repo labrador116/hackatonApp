@@ -14,13 +14,22 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
+import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
 import dev.hackaton.problemresolverapp.models.instances.ProblemPhoto;
 import dev.hackaton.problemresolverapp.models.loaders.GetRequestLoader;
+import dev.hackaton.problemresolverapp.views.activities.DetailProblemActivity;
 import dev.hackaton.problemresolverapp.views.fragments.CreateNewProblemFragment;
+import dev.hackaton.problemresolverapp.views.fragments.DetailProblemFragment;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
@@ -81,4 +90,30 @@ public class CreateNewProblemFragmentPresenter{
     public interface ScanCallback {
         void scanCallbackValue(String url);
     }
+
+    public GetAnswerAboutProblemArea GetRequestJsoneParse(String data){
+        GetAnswerAboutProblemArea problemArea = new GetAnswerAboutProblemArea();
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            int areaId = jsonObject.getInt("areaId");
+            problemArea.setZoneId(areaId);
+            JSONArray jsonArray = jsonObject.getJSONArray("problemList");
+
+            List<String> problems = new ArrayList<>();
+            for (int i=0; i< jsonArray.length(); i++){
+                problems.add(jsonArray.get(i).toString());
+            }
+            problemArea.setListOfProblems(problems);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return problemArea;
+    }
+
+    public void createDetailActivity(Context context, GetAnswerAboutProblemArea answer){
+        Intent intent = new Intent(context, DetailProblemActivity.class);
+        intent.putExtra(DetailProblemActivity.ANSWER_ABOUT_PROBLEM_AREA, answer);
+        context.startActivity(intent);
+    }
+
 }

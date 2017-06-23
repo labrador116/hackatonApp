@@ -63,14 +63,5 @@ public String loadInBackground() {
         super.deliverResult(data);
     }
 
-    private void JsoneParse(String data){
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            int requestId = jsonObject.getInt("requestId");
-            int areaId = jsonObject.getInt("areaId");
-            String description = jsonObject.getString("description");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+
 }
