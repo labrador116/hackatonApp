@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 
@@ -38,9 +39,19 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class CreateNewProblemFragmentPresenter{
     private ScanCallback mCallback;
+    private errMessageCallback mErrCallback;
 
     public CreateNewProblemFragmentPresenter(Fragment fragment){
         mCallback = (ScanCallback) fragment;
+        mErrCallback = (errMessageCallback) fragment;
+    }
+
+    public interface ScanCallback {
+        void scanCallbackValue(String url);
+    }
+
+    public interface errMessageCallback{
+        void sendErrMessage(String errMessage);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -87,17 +98,25 @@ public class CreateNewProblemFragmentPresenter{
         activity.getSupportLoaderManager().initLoader(1,bundle, fragment);
     }
 
-    public interface ScanCallback {
-        void scanCallbackValue(String url);
-    }
+
 
     public GetAnswerAboutProblemArea GetRequestJsoneParse(String data){
         GetAnswerAboutProblemArea problemArea = new GetAnswerAboutProblemArea();
         try {
             JSONObject jsonObject = new JSONObject(data);
-            int areaId = jsonObject.getInt("areaId");
+            JSONObject jsonStatus = jsonObject.getJSONObject("Status");
+            String status = jsonStatus.getString("status");
+
+            if (validateStatus(status)==false){
+                String errMessage = jsonStatus.getString("errors");
+                mErrCallback.sendErrMessage(errMessage);
+                return null;
+            }
+
+            JSONObject jb = jsonObject.getJSONObject("AreaProblemList");
+            int areaId = jb.getInt("areaId");
             problemArea.setZoneId(areaId);
-            JSONArray jsonArray = jsonObject.getJSONArray("problemList");
+            JSONArray jsonArray = jb.getJSONArray("problemList");
 
             List<String> problems = new ArrayList<>();
             for (int i=0; i< jsonArray.length(); i++){
@@ -114,6 +133,13 @@ public class CreateNewProblemFragmentPresenter{
         Intent intent = new Intent(context, DetailProblemActivity.class);
         intent.putExtra(DetailProblemActivity.ANSWER_ABOUT_PROBLEM_AREA, answer);
         context.startActivity(intent);
+    }
+
+    private boolean validateStatus(String numStatus){
+        if (numStatus.equals("OK")==false){
+            return false;
+        }
+        return true;
     }
 
 }

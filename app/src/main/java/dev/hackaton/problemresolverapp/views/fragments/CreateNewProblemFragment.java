@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 
@@ -40,7 +41,8 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * Created by sbt-markin-aa on 22.04.17.
  */
 
-public class CreateNewProblemFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>, CreateNewProblemFragmentPresenter.ScanCallback {
+public class CreateNewProblemFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>, CreateNewProblemFragmentPresenter.ScanCallback,
+        CreateNewProblemFragmentPresenter.errMessageCallback {
     public static final int REQUEST_PHOTO = 1;
     public static final String URI_STATE="uri_state";
     public static final String URI_LINK = "link";
@@ -159,7 +161,12 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     public void onLoadFinished(android.support.v4.content.Loader<String> loader, String data) {
         if (loader instanceof GetRequestLoader){
             mGetAnswer = mPresenter.GetRequestJsoneParse(data);
-            mPresenter.createDetailActivity(getContext(), mGetAnswer);
+
+            if(mGetAnswer!=null) {
+                mPresenter.createDetailActivity(getContext(), mGetAnswer);
+            } else {
+                this.onDestroy();
+            }
         }
 
     }
@@ -182,6 +189,11 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
 
         getActivity().setContentView(mScannerView);
         mScannerView.startCamera();
+    }
+
+    @Override
+    public void sendErrMessage(String errMessage) {
+        Toast.makeText(getContext(),errMessage,Toast.LENGTH_LONG).show();
     }
 
 

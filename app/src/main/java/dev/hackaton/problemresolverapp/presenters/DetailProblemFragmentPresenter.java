@@ -5,4 +5,5 @@ package dev.hackaton.problemresolverapp.presenters;
  */
 
 public class DetailProblemFragmentPresenter {
+
 }
