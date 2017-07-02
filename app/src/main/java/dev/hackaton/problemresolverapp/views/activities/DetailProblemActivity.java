@@ -9,13 +9,14 @@ import java.io.Serializable;
 
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
+import dev.hackaton.problemresolverapp.views.fragments.ChoiceProblemDialogFragment;
 import dev.hackaton.problemresolverapp.views.fragments.DetailProblemFragment;
 
 /**
  * Created by sbt-markin-aa on 16.05.17.
  */
 
-public class DetailProblemActivity extends AppCompatActivity {
+public class DetailProblemActivity extends AppCompatActivity  {
     public static final String ANSWER_ABOUT_PROBLEM_AREA="answer_about_problem_area";
     public static final String ANSWER_ABOUT_PROBLEM_AREA_BUNDLE="answer_about_problem_area_bundle";
 

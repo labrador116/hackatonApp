@@ -1,5 +1,6 @@
 package dev.hackaton.problemresolverapp.views.fragments;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
@@ -86,6 +88,9 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},1);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET},2);
+
                 mUri = Uri.fromFile(mPresenter.getPhotoFile(getContext()));
                 Intent captureImage = mPresenter.createNewProblemButtonHandler(mUri);
                 startActivityForResult(captureImage,REQUEST_PHOTO);

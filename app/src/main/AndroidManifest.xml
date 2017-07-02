@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.hackaton.problemresolverapp">
 
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
     <permission android:name="dev.hackaton.problemresolverapp.models.database.providers.ProblemsDataBaseContentProvider.WRITE_DATABASE" android:protectionLevel="normal"/>
 
 
