@@ -28,6 +28,6 @@ public class DetailProblemActivity extends AppCompatActivity  {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_ABOUT_PROBLEM_AREA_BUNDLE, answer);
         Fragment fragment = DetailProblemFragment.newInstance(bundle);
-        getSupportFragmentManager().beginTransaction().add(R.id.detail_problem_activity_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.detail_problem_activity_container, fragment).addToBackStack("detail_problem_fragment").commit();
     }
 }

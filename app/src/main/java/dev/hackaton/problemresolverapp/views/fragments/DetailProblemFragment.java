@@ -1,5 +1,7 @@
 package dev.hackaton.problemresolverapp.views.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,8 @@ import dev.hackaton.problemresolverapp.views.activities.DetailProblemActivity;
  */
 
 public class DetailProblemFragment extends Fragment {
+
+    private static final int DIALOG_REQUEST_CODE = 2;
 
     private DetailProblemFragmentPresenter mPresenter;
     private GetAnswerAboutProblemArea mGetAnswerAboutProblemArea;
@@ -55,6 +59,7 @@ public class DetailProblemFragment extends Fragment {
                 ChoiceProblemDialogFragment dialogFragment = new ChoiceProblemDialogFragment();
                 Bundle bundle = mPresenter.setAnswerToBundle(mGetAnswerAboutProblemArea);
                 dialogFragment.setArguments(bundle);
+                dialogFragment.setTargetFragment(getTargetFragment(), DIALOG_REQUEST_CODE);
                 dialogFragment.show(getActivity().getSupportFragmentManager(),"choice problem");
             }
         });
@@ -68,6 +73,19 @@ public class DetailProblemFragment extends Fragment {
 
         if (mAnswerFromDialog.getText().length()>0){
             mSelectedProblem = mAnswerFromDialog.getText().toString();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode== Activity.RESULT_OK){
+            switch (requestCode){
+                case DIALOG_REQUEST_CODE:
+                    String selectedItem = data.getStringExtra(ChoiceProblemDialogFragment.DIALOG_FRAGMENT_RESULT);
+                    mAnswerFromDialog.setText(selectedItem);
+            }
         }
     }
 }
