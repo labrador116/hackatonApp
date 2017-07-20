@@ -14,7 +14,7 @@ import java.util.List;
 
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
-import dev.hackaton.problemresolverapp.models.instances.Problem;
+import dev.hackaton.problemresolverapp.models.instances.ProblemInstance;
 
 /**
  * Created by sbt-markin-aa on 23.04.17.
@@ -37,7 +37,7 @@ public class ShowMyProblemFragment extends Fragment {
     }
 
     private void updateUI(){
-        List<Problem> problems = ProblemsDataBinding.getProblems(getContext());
+        List<ProblemInstance> problems = ProblemsDataBinding.getProblems(getContext());
         mAdapter = new MyProblemAdapter(problems);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -46,7 +46,7 @@ public class ShowMyProblemFragment extends Fragment {
         private TextView mTitleTextView;
         private TextView mIdProblem;
         private TextView mIdZone;
-        private Problem mProblem;
+        private ProblemInstance mProblem;
 
 
         public MyProblemHolder(View itemView) {
@@ -57,18 +57,18 @@ public class ShowMyProblemFragment extends Fragment {
             mIdZone = (TextView) itemView.findViewById(R.id.zone_id_text_view);
         }
 
-        public void bindProblem(Problem problem){
+        public void bindProblem(ProblemInstance problem){
             mProblem=problem;
             mTitleTextView.setText(mProblem.getProblemName());
             mIdProblem.setText("ID инцидента: "+String.valueOf(mProblem.getProblemId()));
-            mIdZone.setText("ID зоны инцидента: "+String.valueOf(mProblem.getZoneId()));
+           // mIdZone.setText("ID зоны инцидента: "+String.valueOf(mProblem.getZoneId()));
         }
     }
 
     private class MyProblemAdapter extends RecyclerView.Adapter<MyProblemHolder>{
-        private List<Problem> mProblems;
+        private List<ProblemInstance> mProblems;
 
-        public MyProblemAdapter(List<Problem> problems){
+        public MyProblemAdapter(List<ProblemInstance> problems){
             mProblems=problems;
         }
 
@@ -82,7 +82,7 @@ public class ShowMyProblemFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyProblemHolder holder, int position) {
-            Problem problem = mProblems.get(position);
+            ProblemInstance problem = mProblems.get(position);
             holder.bindProblem(problem);
         }
 

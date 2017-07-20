@@ -26,6 +26,7 @@ import java.util.List;
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
 import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
+import dev.hackaton.problemresolverapp.models.instances.ProblemInstance;
 import dev.hackaton.problemresolverapp.models.instances.ProblemPhoto;
 import dev.hackaton.problemresolverapp.models.loaders.GetRequestLoader;
 import dev.hackaton.problemresolverapp.views.activities.DetailProblemActivity;
@@ -118,9 +119,13 @@ public class CreateNewProblemFragmentPresenter{
             problemArea.setZoneId(areaId);
             JSONArray jsonArray = jb.getJSONArray("problemList");
 
-            List<String> problems = new ArrayList<>();
+            List<ProblemInstance> problems = new ArrayList<>();
             for (int i=0; i< jsonArray.length(); i++){
-                problems.add(jsonArray.get(i).toString());
+                JSONObject problemInstanceJson = jsonArray.getJSONObject(i);
+                ProblemInstance problemInstance = new ProblemInstance();
+                problemInstance.setProblemId(problemInstanceJson.getInt("problemId"));
+                problemInstance.setProblemName(problemInstanceJson.getString("problemName"));
+                problems.add(problemInstance);
             }
             problemArea.setListOfProblems(problems);
         } catch (JSONException e) {

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GetAnswerAboutProblemArea implements Serializable{
     private int mZoneId;
-    private List<String> mListOfProblems;
+    private List<ProblemInstance> mListOfProblems;
 
     public int getZoneId() {
         return mZoneId;
@@ -19,11 +19,11 @@ public class GetAnswerAboutProblemArea implements Serializable{
         mZoneId = zoneId;
     }
 
-    public List<String> getListOfProblems() {
+    public List<ProblemInstance> getListOfProblems() {
         return mListOfProblems;
     }
 
-    public void setListOfProblems(List<String> listOfProblems) {
+    public void setListOfProblems(List<ProblemInstance> listOfProblems) {
         mListOfProblems = listOfProblems;
     }
 }

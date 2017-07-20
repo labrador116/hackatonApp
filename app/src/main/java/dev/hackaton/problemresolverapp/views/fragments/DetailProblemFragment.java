@@ -48,7 +48,7 @@ public class DetailProblemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.detail_problem_fragment,null,false);
+        final View view = inflater.inflate(R.layout.detail_problem_fragment,null,false);
 
         mAnswerFromDialog = (TextView) view.findViewById(R.id.selected_problem_from_dialog);
 
@@ -59,7 +59,7 @@ public class DetailProblemFragment extends Fragment {
                 ChoiceProblemDialogFragment dialogFragment = new ChoiceProblemDialogFragment();
                 Bundle bundle = mPresenter.setAnswerToBundle(mGetAnswerAboutProblemArea);
                 dialogFragment.setArguments(bundle);
-                dialogFragment.setTargetFragment(getTargetFragment(), DIALOG_REQUEST_CODE);
+                dialogFragment.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.detail_problem_activity_container), DIALOG_REQUEST_CODE);
                 dialogFragment.show(getActivity().getSupportFragmentManager(),"choice problem");
             }
         });
@@ -85,6 +85,7 @@ public class DetailProblemFragment extends Fragment {
                 case DIALOG_REQUEST_CODE:
                     String selectedItem = data.getStringExtra(ChoiceProblemDialogFragment.DIALOG_FRAGMENT_RESULT);
                     mAnswerFromDialog.setText(selectedItem);
+                    mAnswerFromDialog.setVisibility(View.VISIBLE);
             }
         }
     }

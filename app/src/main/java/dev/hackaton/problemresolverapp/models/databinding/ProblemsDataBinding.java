@@ -1,6 +1,5 @@
 package dev.hackaton.problemresolverapp.models.databinding;
 
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.hackaton.problemresolverapp.models.database.cursor_wrappers.MyProblemsTableCursorWrapper;
-import dev.hackaton.problemresolverapp.models.database.scheme.ProblemsDataBaseScheme;
 import dev.hackaton.problemresolverapp.models.database.scheme.ProblemsDataBaseScheme.MyProblemsTable;
-import dev.hackaton.problemresolverapp.models.instances.Problem;
+import dev.hackaton.problemresolverapp.models.instances.ProblemInstance;
 
 /**
  * Created by sbt-markin-aa on 23.04.17.
@@ -29,7 +27,7 @@ public class ProblemsDataBinding {
                 );
     }
 
-    public static List<Problem> getProblems(Context context){
+    public static List<ProblemInstance> getProblems(Context context){
         Cursor cursor = context.getContentResolver().query(Uri.parse("content://dev.hackaton.problemresolverapp.models.database.providers.ProblemsDataBaseContentProvider"),
                 null,
                 null,
@@ -37,7 +35,7 @@ public class ProblemsDataBinding {
                 null);
 
         cursor.moveToFirst();
-        List<Problem> problems = new ArrayList<>();
+        List<ProblemInstance> problems = new ArrayList<>();
 
         try{
             while (!cursor.isAfterLast()){

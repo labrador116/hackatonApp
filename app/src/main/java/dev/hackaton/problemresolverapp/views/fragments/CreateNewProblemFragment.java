@@ -74,7 +74,9 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState!=null){
-            mUri = Uri.parse(savedInstanceState.getString(URI_STATE));
+            if(savedInstanceState.getString(URI_STATE)!=null) {
+                mUri = Uri.parse(savedInstanceState.getString(URI_STATE));
+            }
         }
     }
 
