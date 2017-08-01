@@ -134,9 +134,10 @@ public class CreateNewProblemFragmentPresenter{
         return problemArea;
     }
 
-    public void createDetailActivity(Context context, GetAnswerAboutProblemArea answer){
+    public void createDetailActivity(Context context, GetAnswerAboutProblemArea answer, Uri photoProblemUri){
         Intent intent = new Intent(context, DetailProblemActivity.class);
         intent.putExtra(DetailProblemActivity.ANSWER_ABOUT_PROBLEM_AREA, answer);
+        intent.putExtra(DetailProblemActivity.PHOTO_PROBLEM_URI, photoProblemUri);
         context.startActivity(intent);
     }
 

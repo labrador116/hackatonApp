@@ -1,5 +1,6 @@
 package dev.hackaton.problemresolverapp.views.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,14 +20,17 @@ import dev.hackaton.problemresolverapp.views.fragments.DetailProblemFragment;
 public class DetailProblemActivity extends AppCompatActivity  {
     public static final String ANSWER_ABOUT_PROBLEM_AREA="answer_about_problem_area";
     public static final String ANSWER_ABOUT_PROBLEM_AREA_BUNDLE="answer_about_problem_area_bundle";
-
+    public static final String PHOTO_PROBLEM_URI = "photoProblemUri";
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_problem_activity);
         GetAnswerAboutProblemArea answer = (GetAnswerAboutProblemArea) getIntent().getSerializableExtra(ANSWER_ABOUT_PROBLEM_AREA);
+        Uri photoProblemUri = (Uri) getIntent().getParcelableExtra(PHOTO_PROBLEM_URI);
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_ABOUT_PROBLEM_AREA_BUNDLE, answer);
+        bundle.putParcelable(PHOTO_PROBLEM_URI, photoProblemUri);
         Fragment fragment = DetailProblemFragment.newInstance(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.detail_problem_activity_container, fragment).addToBackStack("detail_problem_fragment").commit();
     }

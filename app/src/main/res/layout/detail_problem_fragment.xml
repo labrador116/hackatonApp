@@ -21,16 +21,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:textSize="25sp"/>
-    <EditText
-        android:id="@+id/problem_description_edit_text"
+
+    <LinearLayout
+        android:id="@+id/problem_description_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:scrollbars="vertical"
-        android:maxLines="5"
-        android:visibility="invisible"
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Описание"
+            />
+
+        <EditText
+            android:id="@+id/problem_description_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
+            android:maxLines="5"
+        />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_post_request_button"
+        android:background="@android:color/holo_blue_dark"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:text="Отправить"
         />
 
 </LinearLayout>

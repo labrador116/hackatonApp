@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
+import dev.hackaton.problemresolverapp.models.instances.ProblemInstance;
 import dev.hackaton.problemresolverapp.presenters.DetailProblemFragmentPresenter;
 
 /**
@@ -23,6 +24,7 @@ import dev.hackaton.problemresolverapp.presenters.DetailProblemFragmentPresenter
 
 public class ChoiceProblemDialogFragment extends DialogFragment {
     public static final String DIALOG_FRAGMENT_RESULT = "dialog_fragment_result";
+    public static final String DEALOG_FRAGMENT_RESULT_ID = "dialog_fragment_result_id";
     private GetAnswerAboutProblemArea mGetAnswerAboutProblemArea;
 
     @Override
@@ -38,7 +40,8 @@ public class ChoiceProblemDialogFragment extends DialogFragment {
         CharSequence [] problemListCharSequence = new CharSequence[mGetAnswerAboutProblemArea.getListOfProblems().size()];
 
         for (int i = 0; i < mGetAnswerAboutProblemArea.getListOfProblems().size(); i++) {
-            problemListCharSequence[i]=mGetAnswerAboutProblemArea.getListOfProblems().get(i);
+            ProblemInstance problemInstance = mGetAnswerAboutProblemArea.getListOfProblems().get(i);
+            problemListCharSequence[i]= problemInstance.getProblemName();
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -46,9 +49,12 @@ public class ChoiceProblemDialogFragment extends DialogFragment {
                 .setItems(problemListCharSequence, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String selectedStringProblem = mGetAnswerAboutProblemArea.getListOfProblems().get(which);
+                        ProblemInstance problemInstance = mGetAnswerAboutProblemArea.getListOfProblems().get(which);
+                        String selectedStringProblem = problemInstance.getProblemName();
+                        int selectedIdProblem = problemInstance.getProblemId();
                         Intent intent = new Intent();
                         intent.putExtra(DIALOG_FRAGMENT_RESULT,selectedStringProblem);
+                        intent.putExtra(DEALOG_FRAGMENT_RESULT_ID, selectedIdProblem);
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                     }
                 });

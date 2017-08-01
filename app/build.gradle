@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+    }
     defaultConfig {
         applicationId "dev.hackaton.problemresolverapp"
         minSdkVersion 16
@@ -30,4 +34,5 @@ dependencies {
     compile 'me.dm7.barcodescanner:zxing:1.9'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
 }

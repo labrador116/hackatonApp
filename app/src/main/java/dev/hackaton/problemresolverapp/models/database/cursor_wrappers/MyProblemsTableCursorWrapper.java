@@ -27,9 +27,7 @@ public class MyProblemsTableCursorWrapper extends CursorWrapper {
 
         ProblemInstance problem = new ProblemInstance();
         problem.setProblemId(problemId);
-        problem.setZoneId(zoneId);
         problem.setProblemName(problemName);
-
         return problem;
     }
 

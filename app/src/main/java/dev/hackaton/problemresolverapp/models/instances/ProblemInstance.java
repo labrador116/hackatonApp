@@ -1,10 +1,12 @@
 package dev.hackaton.problemresolverapp.models.instances;
 
+import java.io.Serializable;
+
 /**
  * Created by sbt-markin-aa on 22.04.17.
  */
 
-public class ProblemInstance {
+public class ProblemInstance implements Serializable {
     private int mProblemId;
     private String mProblemName;
 

@@ -50,7 +50,7 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     public static final String URI_LINK = "link";
 
     private Button mCreateProblemButton;
-    private  Button mShowMyProblemButton;
+    private Button mShowMyProblemButton;
     private CreateNewProblemFragmentPresenter mPresenter;
     private Uri mUri;
     private ZXingScannerView mScannerView;
@@ -156,10 +156,6 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
                 String urlGet =args.getString(GetRequestLoader.URL_FOR_GET_REQUEST);
                 mLoader = new GetRequestLoader(getContext(), urlGet);
                 break;
-            case 2:
-                String urlPost = args.getString(PostRequestLoader.URL_FOR_POST_REQUEST);
-                mLoader = new PostRequestLoader(getContext(),urlPost);
-                break;
         }
         return mLoader;
     }
@@ -170,7 +166,7 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
             mGetAnswer = mPresenter.GetRequestJsoneParse(data);
 
             if(mGetAnswer!=null) {
-                mPresenter.createDetailActivity(getContext(), mGetAnswer);
+                mPresenter.createDetailActivity(getContext(), mGetAnswer, mUri);
             } else {
                 this.onDestroy();
             }
@@ -183,70 +179,8 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
 
     }
 
-    private void scanCode(){
-        mScannerView = new ZXingScannerView(getContext());
-        mScannerView.setResultHandler(new ZXingScannerView.ResultHandler() {
-            @Override
-            public void handleResult(Result result) {
-                String res = result.getText();
-                mScannerView.stopCamera();
-
-            }
-        });
-
-        getActivity().setContentView(mScannerView);
-        mScannerView.startCamera();
-    }
-
     @Override
     public void sendErrMessage(String errMessage) {
         Toast.makeText(getContext(),errMessage,Toast.LENGTH_LONG).show();
     }
-
-
-//    private class GetData extends AsyncTask<String, String, String> {
-//
-//        HttpURLConnection urlConnection;
-//
-//        @Override
-//        protected String doInBackground(String... args) {
-//
-//            StringBuilder result = new StringBuilder();
-//
-//            try {
-//                URL url = new URL(args[0]);
-//                urlConnection = (HttpURLConnection) url.openConnection();
-//                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-//
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-//
-//                String line;
-//                while ((line = reader.readLine()) != null) {
-//                    result.append(line);
-//                }
-//
-//            }catch( Exception e) {
-//                e.printStackTrace();
-//            }
-//            finally {
-//                urlConnection.disconnect();
-//            }
-//
-//
-//            return result.toString();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//            try {
-//                JSONObject jsonObject = new JSONObject(result);
-//                int requestId = jsonObject.getInt("requestId");
-//                int areaId = jsonObject.getInt("areaId");
-//                String description = jsonObject.getString("description");
-//                mPresenter.sendProblem(getContext(), requestId, areaId, description);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
