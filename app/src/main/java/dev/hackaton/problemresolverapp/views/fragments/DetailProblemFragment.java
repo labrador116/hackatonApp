@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.os.EnvironmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,7 +127,22 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     public Loader<String> onCreateLoader(int id, Bundle args) {
         File photoFile = new File(mPhotoProblemUri.getPath());
         Bitmap bitmapPhotoFile = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-        mLoader = new PostRequestLoader(getContext(), mUrlPost, bitmapPhotoFile, mGetAnswerAboutProblemArea.getZoneId(), mSelectedIdProblem);
+        if (!mDescriptionEditText.getText().toString().isEmpty()) {
+            mLoader = new PostRequestLoader(
+                    getContext(),
+                    mUrlPost,
+                    bitmapPhotoFile,
+                    mGetAnswerAboutProblemArea.getZoneId(),
+                    mSelectedIdProblem,
+                    mDescriptionEditText.getText().toString());
+        } else {
+            mLoader = new PostRequestLoader(
+                    getContext(),
+                    mUrlPost,
+                    bitmapPhotoFile,
+                    mGetAnswerAboutProblemArea.getZoneId(),
+                    mSelectedIdProblem);
+        }
         return mLoader;
     }
 

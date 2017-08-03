@@ -26,6 +26,7 @@ public class PostRequestLoader extends AsyncTaskLoader<String> {
     private Bitmap mPhotoProblemBitmap;
     private int mAreaId;
     private int mProblemTypeId;
+    private String mDescription;
 
     public PostRequestLoader(Context context, String stringUrl, Bitmap photoProblemBitmap, int areaId, int problemTypeId) {
         super(context);
@@ -33,6 +34,15 @@ public class PostRequestLoader extends AsyncTaskLoader<String> {
         mPhotoProblemBitmap = photoProblemBitmap;
         mAreaId = areaId;
         mProblemTypeId = problemTypeId;
+    }
+
+    public PostRequestLoader(Context context, String stringUrl, Bitmap photoProblemBitmap, int areaId, int problemTypeId, String description) {
+        super(context);
+        mStringUrl = stringUrl;
+        mPhotoProblemBitmap = photoProblemBitmap;
+        mAreaId = areaId;
+        mProblemTypeId = problemTypeId;
+        mDescription = description;
     }
 
     @Override
