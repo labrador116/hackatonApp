@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
@@ -41,9 +42,10 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     private EditText mDescriptionEditText;
     private LinearLayout mProblemDescriptionLinearLayout;
     private Button mStartPostRequestButton;
+    private ProgressBar mSendPostRequestProgressBar;
     private Uri mPhotoProblemUri;
     private android.support.v4.content.Loader<String> mLoader;
-    private String mUrlPost = "http://62.109.16.244:8080/api/mobile/register";
+    private String mUrlPost = "http://31.148.99.128:8080/ipr/api/mobile/register/";
     private String mSelectedProblem;
     private String mDescription;
     private int mSelectedIdProblem;
@@ -72,6 +74,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
         mAnswerFromDialog = (TextView) view.findViewById(R.id.selected_problem_from_dialog);
         mDescriptionEditText = (EditText) view.findViewById(R.id.problem_description_edit_text);
         mProblemDescriptionLinearLayout = (LinearLayout) view.findViewById(R.id.problem_description_linear_layout);
+        mSendPostRequestProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mChoiceProblemButton = (Button) view.findViewById(R.id.choice_problem_button);
         mChoiceProblemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +134,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
             mLoader = new PostRequestLoader(
                     getContext(),
                     mUrlPost,
-                    bitmapPhotoFile,
+                    photoFile,
                     mGetAnswerAboutProblemArea.getZoneId(),
                     mSelectedIdProblem,
                     mDescriptionEditText.getText().toString());
@@ -139,7 +142,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
             mLoader = new PostRequestLoader(
                     getContext(),
                     mUrlPost,
-                    bitmapPhotoFile,
+                    photoFile,
                     mGetAnswerAboutProblemArea.getZoneId(),
                     mSelectedIdProblem);
         }
@@ -148,6 +151,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
+        mSendPostRequestProgressBar.setVisibility(View.GONE);
         String jsyon = data;
     }
 
@@ -157,6 +161,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void startPostRequest() {
+        mSendPostRequestProgressBar.setVisibility(View.VISIBLE);
         mPresenter.createLoaderForPostRequest(getActivity(), this);
     }
 }
