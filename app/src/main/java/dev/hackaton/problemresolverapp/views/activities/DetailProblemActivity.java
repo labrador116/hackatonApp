@@ -18,15 +18,11 @@ import dev.hackaton.problemresolverapp.views.fragments.DetailProblemFragment;
  * Created by sbt-markin-aa on 16.05.17.
  */
 
-public class DetailProblemActivity extends AppCompatActivity  {
-    public static final String ANSWER_ABOUT_PROBLEM_AREA="answer_about_problem_area";
-    public static final String ANSWER_ABOUT_PROBLEM_AREA_BUNDLE="answer_about_problem_area_bundle";
-    public static final String PHOTO_PROBLEM_URI = "photoProblemUri";
-    
+public class DetailProblemActivity extends BaseApplicationActivity  {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_problem_activity);
         DetailProblemActivityPresenter.startDetailProblemFragment(this);
     }
 }

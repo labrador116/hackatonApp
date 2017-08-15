@@ -12,18 +12,14 @@ import dev.hackaton.problemresolverapp.views.fragments.ShowMyProblemFragment;
  * Created by sbt-markin-aa on 23.04.17.
  */
 
-public class ShowMyProblemsActivity extends AppCompatActivity {
+public class ShowMyProblemsActivity extends BaseApplicationActivity {
     private ShowMyProblemFragment mFragment;
     private ShowMyProblemActivityPresenter mPresenter;
-
-    public ShowMyProblemsActivity(){
-        mPresenter = new ShowMyProblemActivityPresenter();
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_my_problem_activity);
+        mPresenter = new ShowMyProblemActivityPresenter();
         mPresenter.createFragment(mFragment, this);
     }
 }

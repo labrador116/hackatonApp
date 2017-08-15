@@ -2,14 +2,14 @@ package dev.hackaton.problemresolverapp.views.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +24,19 @@ import java.io.File;
 import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
 import dev.hackaton.problemresolverapp.models.loaders.PostRequestLoader;
+import dev.hackaton.problemresolverapp.presenters.DetailProblemActivityPresenter;
 import dev.hackaton.problemresolverapp.presenters.DetailProblemFragmentPresenter;
-import dev.hackaton.problemresolverapp.views.activities.DetailProblemActivity;
 
 /**
  * Created by sbt-markin-aa on 16.05.17.
  */
 
-public class DetailProblemFragment extends Fragment implements LoaderManager.LoaderCallbacks<String> {
+public class DetailProblemFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>, PostRequestLoader.PostRequestLoaderCancelCallback {
 
     private static final int DIALOG_REQUEST_CODE = 2;
+
+    private static final String ANSWER_FROM_DIALOG = "mAnswerFromDialog";
+    private static final String DESCRIPTION_EDIT_TEXT = "mDescriptionEditText";
 
     private DetailProblemFragmentPresenter mPresenter;
     private GetAnswerAboutProblemArea mGetAnswerAboutProblemArea;
@@ -45,9 +48,8 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     private ProgressBar mSendPostRequestProgressBar;
     private Uri mPhotoProblemUri;
     private android.support.v4.content.Loader<String> mLoader;
-    private String mUrlPost = "http://31.148.99.128:8080/ipr/api/mobile/register/";
+    //ToDo можно использовать для хранения в списке действующих заявок
     private String mSelectedProblem;
-    private String mDescription;
     private int mSelectedIdProblem;
 
     public static DetailProblemFragment newInstance(Bundle bundle) {
@@ -62,8 +64,8 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
         setRetainInstance(true);
         mPresenter = new DetailProblemFragmentPresenter();
         Bundle bundle = getArguments();
-        mGetAnswerAboutProblemArea = (GetAnswerAboutProblemArea) bundle.getSerializable(DetailProblemActivity.ANSWER_ABOUT_PROBLEM_AREA_BUNDLE);
-        mPhotoProblemUri = bundle.getParcelable(DetailProblemActivity.PHOTO_PROBLEM_URI);
+        mGetAnswerAboutProblemArea = (GetAnswerAboutProblemArea) bundle.getSerializable(DetailProblemActivityPresenter.ANSWER_ABOUT_PROBLEM_AREA_BUNDLE);
+        mPhotoProblemUri = bundle.getParcelable(DetailProblemActivityPresenter.PHOTO_PROBLEM_URI);
     }
 
     @Nullable
@@ -82,7 +84,8 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
                 ChoiceProblemDialogFragment dialogFragment = new ChoiceProblemDialogFragment();
                 Bundle bundle = mPresenter.setAnswerToBundle(mGetAnswerAboutProblemArea);
                 dialogFragment.setArguments(bundle);
-                dialogFragment.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.detail_problem_activity_container), DIALOG_REQUEST_CODE);
+                dialogFragment.setTargetFragment(getActivity().getSupportFragmentManager().
+                        findFragmentById(R.id.fragment_container), DIALOG_REQUEST_CODE);
                 dialogFragment.show(getActivity().getSupportFragmentManager(), "choice problem");
             }
         });
@@ -95,6 +98,17 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
 
             }
         });
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getString(ANSWER_FROM_DIALOG) != null) {
+                mAnswerFromDialog.setVisibility(View.VISIBLE);
+                mAnswerFromDialog.setText(savedInstanceState.getString(ANSWER_FROM_DIALOG));
+            }
+            if (savedInstanceState.getString(DESCRIPTION_EDIT_TEXT) != null) {
+                mDescriptionEditText.setVisibility(View.VISIBLE);
+                mDescriptionEditText.setText(savedInstanceState.getString(DESCRIPTION_EDIT_TEXT));
+            }
+        }
 
         return view;
     }
@@ -127,24 +141,35 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(ANSWER_FROM_DIALOG, mAnswerFromDialog
+                .getText()
+                .toString());
+        outState.putString(DESCRIPTION_EDIT_TEXT, mDescriptionEditText
+                .getText()
+                .toString());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
         File photoFile = new File(mPhotoProblemUri.getPath());
-        Bitmap bitmapPhotoFile = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
         if (!mDescriptionEditText.getText().toString().isEmpty()) {
             mLoader = new PostRequestLoader(
                     getContext(),
-                    mUrlPost,
                     photoFile,
                     mGetAnswerAboutProblemArea.getZoneId(),
                     mSelectedIdProblem,
-                    mDescriptionEditText.getText().toString());
+                    mDescriptionEditText.getText().toString(),
+                    this);
         } else {
             mLoader = new PostRequestLoader(
                     getContext(),
-                    mUrlPost,
                     photoFile,
                     mGetAnswerAboutProblemArea.getZoneId(),
-                    mSelectedIdProblem);
+                    mSelectedIdProblem,
+                    this);
         }
         return mLoader;
     }
@@ -152,12 +177,32 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         mSendPostRequestProgressBar.setVisibility(View.GONE);
-        String jsyon = data;
+        String jsyon = data; //ToDO Создать список проблем по данным json
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().getSupportFragmentManager().beginTransaction().
+                        add(R.id.fragment_container, SuccesPostRequestFragment.newInstance())
+                        .commit();
+            }
+        });
     }
+
 
     @Override
     public void onLoaderReset(Loader<String> loader) {
+    }
 
+    @Override
+    public void cancelCallback() {
+    }
+
+    private void showAlerDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Ошибка!")
+                .setMessage("Произошла ошибка при отправке данных на сервер!");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void startPostRequest() {

@@ -69,15 +69,14 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_new_problem_fragment, container, false);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET}, 2);
 
         mCreateProblemButton = (Button) view.findViewById(R.id.create_problem_button);
         mCreateProblemButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET}, 2);
-
                 mUri = Uri.fromFile(mPresenter.getPhotoFile(getContext()));
                 Intent captureImage = mPresenter.createNewProblemButtonHandler(mUri);
                 startActivityForResult(captureImage, REQUEST_PHOTO);
@@ -98,7 +97,6 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     @Override
     public void onResume() {
         super.onResume();
-
         if (mScannerView != null) {
             mScannerView.stopCamera();
         }
@@ -149,7 +147,6 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     public void onLoadFinished(android.support.v4.content.Loader<String> loader, String data) {
         if (loader instanceof GetRequestLoader) {
             mGetAnswer = mPresenter.GetRequestJsoneParse(data);
-
             if (mGetAnswer != null) {
                 mPresenter.createDetailActivity(getContext(), mGetAnswer, mUri);
             } else {

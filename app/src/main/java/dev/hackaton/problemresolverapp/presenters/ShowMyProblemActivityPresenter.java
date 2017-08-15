@@ -17,6 +17,6 @@ public class ShowMyProblemActivityPresenter {
         if(fragment==null){
             fragment=new ShowMyProblemFragment();
         }
-        activity.getSupportFragmentManager().beginTransaction().add(R.id.show_my_problem_fragment_container,fragment).commit();
+       // activity.getSupportFragmentManager().beginTransaction().add(R.id.show_my_problem_fragment_container,fragment).commit();
     }
 }

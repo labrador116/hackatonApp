@@ -15,7 +15,7 @@ public class CreateNewProblemActivityPresenter {
         CreateNewProblemFragment fragment = CreateNewProblemFragment.newInstance();
         activity.getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.new_problem_fragment_container, fragment)
+                .add(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
     }
