@@ -74,7 +74,11 @@ public class PostRequestLoader extends AsyncTaskLoader<String> {
         Call<ResponseBody> call = sendPostData.sendData(ww.part(0), areaId, problemTypeId);
         try {
             retrofit2.Response<ResponseBody> response = call.execute();
-            return response.body().string();
+            if (response.isSuccessful()) {
+                return response.body().string();
+            } else {
+                return "error";
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;

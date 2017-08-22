@@ -71,10 +71,6 @@ public class CreateNewProblemFragmentPresenter {
         return captureImage;
     }
 
-    public void sendProblem(Context context, int problemId, int zoneId, String description) {
-        ProblemsDataBinding.sendProblem(context, problemId, zoneId, description);
-    }
-
     public void scanCode(ZXingScannerView scanner, Context context, AppCompatActivity activity) {
         scanner = new ZXingScannerView(context);
         scanner.setResultHandler(new ZXingScannerView.ResultHandler() {

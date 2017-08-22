@@ -19,9 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 import dev.hackaton.problemresolverapp.R;
+import dev.hackaton.problemresolverapp.models.databinding.ProblemsDataBinding;
 import dev.hackaton.problemresolverapp.models.instances.GetAnswerAboutProblemArea;
 import dev.hackaton.problemresolverapp.models.loaders.PostRequestLoader;
 import dev.hackaton.problemresolverapp.presenters.DetailProblemActivityPresenter;
@@ -48,7 +52,6 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     private ProgressBar mSendPostRequestProgressBar;
     private Uri mPhotoProblemUri;
     private android.support.v4.content.Loader<String> mLoader;
-    //ToDo можно использовать для хранения в списке действующих заявок
     private String mSelectedProblem;
     private int mSelectedIdProblem;
 
@@ -177,15 +180,23 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         mSendPostRequestProgressBar.setVisibility(View.GONE);
-        String jsyon = data; //ToDO Создать список проблем по данным json
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().getSupportFragmentManager().beginTransaction().
-                        add(R.id.fragment_container, SuccesPostRequestFragment.newInstance())
-                        .commit();
-            }
-        });
+        if(!data.equals("error")) {
+            String jsonResponse = data;
+            int requestProblemId = Integer.valueOf(parseJsonByKey(jsonResponse,"RequestID"));
+            String problemName = parseJsonByKey(jsonResponse,"ProblemName");
+            String problemStatus = parseJsonByKey(jsonResponse, "RequestStatus");
+            ProblemsDataBinding.sendProblem(getContext(),requestProblemId,problemName,problemStatus);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().getSupportFragmentManager().beginTransaction().
+                            add(R.id.fragment_container, SuccesPostRequestFragment.newInstance())
+                            .commit();
+                }
+            });
+        } else {
+            showAlerDialog();
+        }
     }
 
 
@@ -208,5 +219,17 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     private void startPostRequest() {
         mSendPostRequestProgressBar.setVisibility(View.VISIBLE);
         mPresenter.createLoaderForPostRequest(getActivity(), this);
+    }
+
+    private String parseJsonByKey(String json, String key){
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            String result = jsonObject.getString(key);
+            return result;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }

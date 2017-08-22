@@ -21,13 +21,14 @@ public class MyProblemsTableCursorWrapper extends CursorWrapper {
     }
 
     public ProblemInstance getProblem(){
-        int problemId = getInt(getColumnIndex(MyProblemsTable.Columns.PROBLEM_ID));
-        int zoneId = getInt(getColumnIndex(MyProblemsTable.Columns.ZONE_ID));
-        String problemName = getString(getColumnIndex(MyProblemsTable.Columns.NAME_OF_PROBLEM));
+        int problemId = getInt(getColumnIndex(MyProblemsTable.Columns.REQUEST_PROBLEM_ID));
+        String problemName = getString(getColumnIndex(MyProblemsTable.Columns.PROBLEM_NAME));
+        String problemStatus = getString(getColumnIndex(MyProblemsTable.Columns.PROBLEM_STATUS));
 
         ProblemInstance problem = new ProblemInstance();
         problem.setProblemId(problemId);
         problem.setProblemName(problemName);
+        problem.setProblemStatus(problemStatus);
         return problem;
     }
 

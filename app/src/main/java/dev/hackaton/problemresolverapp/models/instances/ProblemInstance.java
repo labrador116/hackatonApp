@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class ProblemInstance implements Serializable {
     private int mProblemId;
     private String mProblemName;
+    private String mProblemStatus;
 
     public int getProblemId() {
         return mProblemId;
@@ -24,5 +25,13 @@ public class ProblemInstance implements Serializable {
 
     public void setProblemName(String problemName) {
         mProblemName = problemName;
+    }
+
+    public String getProblemStatus() {
+        return mProblemStatus;
+    }
+
+    public void setProblemStatus(String problemStatus) {
+        mProblemStatus = problemStatus;
     }
 }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import dev.hackaton.problemresolverapp.models.database.scheme.ProblemsDataBaseScheme;
-
 import static dev.hackaton.problemresolverapp.models.database.scheme.ProblemsDataBaseScheme.*;
 
 /**
@@ -26,9 +24,9 @@ public class ProblemsDataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + MyProblemsTable.NAME+
                 " ( "+
                 "_id integer primary key autoincrement, "+
-                MyProblemsTable.Columns.PROBLEM_ID + ", "+
-                MyProblemsTable.Columns.ZONE_ID + ", " +
-                MyProblemsTable.Columns.NAME_OF_PROBLEM +
+                MyProblemsTable.Columns.REQUEST_PROBLEM_ID + ", "+
+                MyProblemsTable.Columns.PROBLEM_NAME + ", " +
+                MyProblemsTable.Columns.PROBLEM_STATUS +
                 " ) ");
     }
 

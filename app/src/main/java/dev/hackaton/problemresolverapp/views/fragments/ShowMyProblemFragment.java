@@ -43,25 +43,21 @@ public class ShowMyProblemFragment extends Fragment {
     }
 
     private class MyProblemHolder extends RecyclerView.ViewHolder{
-        private TextView mTitleTextView;
-        private TextView mIdProblem;
-        private TextView mIdZone;
+        private TextView mProblemNameTextView;
+        private TextView mStatusProblemTextView;
         private ProblemInstance mProblem;
 
 
         public MyProblemHolder(View itemView) {
             super(itemView);
-
-            mTitleTextView = (TextView) itemView.findViewById(R.id.descripion_text_view);
-            mIdProblem = (TextView) itemView.findViewById(R.id.problem_id_text_view);
-            mIdZone = (TextView) itemView.findViewById(R.id.zone_id_text_view);
+            mProblemNameTextView = (TextView) itemView.findViewById(R.id.problem_name_text_view);
+            mStatusProblemTextView = (TextView) itemView.findViewById(R.id.problem_status_text_view);
         }
 
         public void bindProblem(ProblemInstance problem){
             mProblem=problem;
-            mTitleTextView.setText(mProblem.getProblemName());
-            mIdProblem.setText("ID инцидента: "+String.valueOf(mProblem.getProblemId()));
-           // mIdZone.setText("ID зоны инцидента: "+String.valueOf(mProblem.getZoneId()));
+            mProblemNameTextView.setText(mProblem.getProblemName());
+            mStatusProblemTextView.setText(mProblem.getProblemStatus());
         }
     }
 
@@ -75,7 +71,6 @@ public class ShowMyProblemFragment extends Fragment {
         @Override
         public MyProblemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-
             View view = layoutInflater.inflate(R.layout.list_item_problem,parent,false);
             return new MyProblemHolder(view);
         }

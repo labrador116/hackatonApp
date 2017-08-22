@@ -9,9 +9,9 @@ public class ProblemsDataBaseScheme {
         public static final String NAME = "my_problems";
 
         public static final class Columns {
-            public static final String PROBLEM_ID = "problem_id";
-            public static final String ZONE_ID = "zone_id";
-            public static final String NAME_OF_PROBLEM = "problem_name";
+            public static final String REQUEST_PROBLEM_ID = "request_problem_id";
+            public static final String PROBLEM_NAME = "problem_name";
+            public static final String PROBLEM_STATUS = "problem_status";
         }
     }
 }

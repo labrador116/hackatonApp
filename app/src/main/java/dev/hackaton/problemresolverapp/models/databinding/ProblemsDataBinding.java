@@ -17,11 +17,11 @@ import dev.hackaton.problemresolverapp.models.instances.ProblemInstance;
  */
 
 public class ProblemsDataBinding {
-    public static void sendProblem(Context context, int problemId, int zoneId, String description){
+    public static void sendProblem(Context context, int requestProblemId, String problemName, String problemStatus){
         ContentValues values = new ContentValues();
-        values.put(MyProblemsTable.Columns.PROBLEM_ID, problemId);
-        values.put(MyProblemsTable.Columns.ZONE_ID,zoneId);
-        values.put(MyProblemsTable.Columns.NAME_OF_PROBLEM, description);
+        values.put(MyProblemsTable.Columns.REQUEST_PROBLEM_ID, requestProblemId);
+        values.put(MyProblemsTable.Columns.PROBLEM_NAME,problemName);
+        values.put(MyProblemsTable.Columns.PROBLEM_STATUS, problemStatus);
         context.getContentResolver().insert(Uri.parse("content://dev.hackaton.problemresolverapp.models.database.providers.ProblemsDataBaseContentProvider"),
                 values
                 );

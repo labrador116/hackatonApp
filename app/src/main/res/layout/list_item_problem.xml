@@ -10,29 +10,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/descripion_text_view"
-        android:text="twwerwrw"
+        android:id="@+id/problem_name_text_view"
+        android:layout_centerHorizontal="true"
+        android:text="Test name"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/problem_id_text_view"
-        android:layout_below="@id/descripion_text_view"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:text="test"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/zone_id_text_view"
-        android:layout_below="@id/descripion_text_view"
-        android:layout_toRightOf="@id/problem_id_text_view"
+        android:id="@+id/problem_status_text_view"
+        android:layout_below="@id/problem_name_text_view"
+        android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
         android:layout_marginLeft="80dp"
         android:textSize="18sp"
-        android:text="test"
+        android:text="test-status"
         />
 
 </RelativeLayout>
