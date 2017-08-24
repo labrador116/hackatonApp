@@ -13,10 +13,10 @@ import dev.hackaton.problemresolverapp.views.fragments.ShowMyProblemFragment;
 
 public class ShowMyProblemActivityPresenter {
 
-    public void createFragment(Fragment fragment, AppCompatActivity activity){
-        if(fragment==null){
-            fragment=new ShowMyProblemFragment();
+    public void createFragment(Fragment fragment, AppCompatActivity activity) {
+        if (fragment == null) {
+            fragment = new ShowMyProblemFragment();
         }
-       // activity.getSupportFragmentManager().beginTransaction().add(R.id.show_my_problem_fragment_container,fragment).commit();
+        activity.getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
     }
 }

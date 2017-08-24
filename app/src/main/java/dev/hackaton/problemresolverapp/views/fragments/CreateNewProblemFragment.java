@@ -71,7 +71,7 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
         View view = inflater.inflate(R.layout.create_new_problem_fragment, container, false);
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET}, 2);
-
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 3);
         mCreateProblemButton = (Button) view.findViewById(R.id.create_problem_button);
         mCreateProblemButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

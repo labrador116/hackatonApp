@@ -1,7 +1,10 @@
 package dev.hackaton.problemresolverapp.views.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -97,7 +100,15 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
         mStartPostRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPostRequest();
+                if (isInternetConnection()) {
+                    startPostRequest();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Отсутсвует подключение к интернету!")
+                            .setMessage("Пожалуйста подключитесь к сети интернет!");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
 
             }
         });
@@ -180,25 +191,26 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         mSendPostRequestProgressBar.setVisibility(View.GONE);
-        if(!data.equals("error")) {
-            String jsonResponse = data;
-            int requestProblemId = Integer.valueOf(parseJsonByKey(jsonResponse,"RequestID"));
-            String problemName = parseJsonByKey(jsonResponse,"ProblemName");
-            String problemStatus = parseJsonByKey(jsonResponse, "RequestStatus");
-            ProblemsDataBinding.sendProblem(getContext(),requestProblemId,problemName,problemStatus);
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    getActivity().getSupportFragmentManager().beginTransaction().
-                            add(R.id.fragment_container, SuccesPostRequestFragment.newInstance())
-                            .commit();
-                }
-            });
-        } else {
-            showAlerDialog();
+        if (data != null) {
+            if (!data.equals("error")) {
+                String jsonResponse = data;
+                int requestProblemId = Integer.valueOf(parseJsonByKey(jsonResponse, "RequestID"));
+                String problemName = parseJsonByKey(jsonResponse, "ProblemName");
+                String problemStatus = parseJsonByKey(jsonResponse, "RequestStatus");
+                ProblemsDataBinding.sendProblem(getContext(), requestProblemId, problemName, problemStatus);
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getSupportFragmentManager().beginTransaction().
+                                add(R.id.fragment_container, SuccesPostRequestFragment.newInstance())
+                                .commit();
+                    }
+                });
+            } else {
+                showAlerDialog();
+            }
         }
     }
-
 
     @Override
     public void onLoaderReset(Loader<String> loader) {
@@ -208,7 +220,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
     public void cancelCallback() {
     }
 
-    private void showAlerDialog(){
+    private void showAlerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Ошибка!")
                 .setMessage("Произошла ошибка при отправке данных на сервер!");
@@ -221,7 +233,7 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
         mPresenter.createLoaderForPostRequest(getActivity(), this);
     }
 
-    private String parseJsonByKey(String json, String key){
+    private String parseJsonByKey(String json, String key) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             String result = jsonObject.getString(key);
@@ -230,6 +242,12 @@ public class DetailProblemFragment extends Fragment implements LoaderManager.Loa
             e.printStackTrace();
             return null;
         }
+    }
 
+    public boolean isInternetConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

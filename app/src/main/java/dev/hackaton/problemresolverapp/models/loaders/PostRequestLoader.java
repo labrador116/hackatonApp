@@ -1,16 +1,13 @@
 package dev.hackaton.problemresolverapp.models.loaders;
 
 import android.content.Context;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
-import dev.hackaton.problemresolverapp.R;
 import dev.hackaton.problemresolverapp.views.fragments.DetailProblemFragment;
-import dev.hackaton.problemresolverapp.views.fragments.SuccesPostRequestFragment;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -60,7 +57,12 @@ public class PostRequestLoader extends AsyncTaskLoader<String> {
     public String loadInBackground() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(3, TimeUnit.MINUTES)
+                .readTimeout(3, TimeUnit.MINUTES)
+                .writeTimeout(3, TimeUnit.MINUTES)
+                .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(URL_FOR_POST_REQUEST)
