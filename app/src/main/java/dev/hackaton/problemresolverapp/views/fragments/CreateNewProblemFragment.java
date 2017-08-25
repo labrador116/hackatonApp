@@ -69,9 +69,11 @@ public class CreateNewProblemFragment extends Fragment implements LoaderManager.
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_new_problem_fragment, container, false);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET}, 2);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 3);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                "dev.hackaton.problemresolverapp.models.database.providers.ProblemsDataBaseContentProvider.WRITE_DATABASE"}, 1);
         mCreateProblemButton = (Button) view.findViewById(R.id.create_problem_button);
         mCreateProblemButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

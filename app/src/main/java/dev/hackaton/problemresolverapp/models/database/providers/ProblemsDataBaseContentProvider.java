@@ -58,7 +58,10 @@ public class ProblemsDataBaseContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        mDatabase.insert(MyProblemsTable.NAME,null,values);
+       long result =  mDatabase.insert(MyProblemsTable.NAME,null,values);
+        if (result==-1){
+            throw new RuntimeException();
+        }
         return null;
     }
 
